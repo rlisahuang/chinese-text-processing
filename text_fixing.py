@@ -1,7 +1,18 @@
+# text_fixing.py
 # -*- coding: utf-8 -*-
+# This file includes all the helper functions needed for fixing either an entire
+# file or a single sentence.
+
 
 import re
-import sys
+from langconv import *
+
+def Traditional2Simplified(line):
+    '''
+    Convert traditional Chinese characters in the line to simplified ones.
+    '''
+    line = Converter('zh-hans').convert(line)
+    return line
 
 
 def remove_extra_punctuation(line): 
@@ -99,22 +110,32 @@ def remove_extra_space(line):
             line=empty+line[i:]
             return line
 
-        
-#--------------------------- Main Function ----------------------------                
-                       
-                                        
-def main():
-    filename = input("Filename: ")
-    with open(filename, 'r', encoding='utf-8') as fl1:
+# ------------------------- Main Function ----------------------------------
+
+def text_fixing_line(line):
+    tran2simp = Traditional2Simplified(line)
+    noUsernRepeat = username_and_duplicate_char(tran2simp)
+    noOther = filter_other(noUsernRepeat)
+    noNonsense = filter_nonsense(noOther)
+    noBrackets = filter_brackets(noNonsense)
+    noPunc = remove_extra_punctuation(noBrackets)
+    result = remove_extra_space(noPunc)    
+    
+    return result
+    
+def text_fixing_file(inputfile, outputfile):
+    
+    with open(inputfile, 'r', encoding='utf-8') as fl1:
         lines = fl1.readlines()
 
-    fl2 = open(filename.split('.')[0] + '_fixed.txt', 'w', encoding='utf-8')
+    fl2 = open(outputfile, 'w', encoding='utf-8')
     lines_seen = set()
     lines_added = []
     
     for i in range(len(lines)):  
         if lines[i] not in lines_seen:
-            noUsernRepeat = username_and_duplicate_char(lines[i])
+            tran2simp = Traditional2Simplified(lines[i])
+            noUsernRepeat = username_and_duplicate_char(tran2simp)
             noOther = filter_other(noUsernRepeat)
             noNonsense = filter_nonsense(noOther)
             noBrackets = filter_brackets(noNonsense)
@@ -137,8 +158,11 @@ def main():
 
 
     fl2.close()
-
-#------------------------------ Testing ----------------------------------
-
+    
+# --------------------------- Testing --------------------------------
+    
 if __name__ == "__main__":
-    main()
+    line = text_fixing_line('哈哈哈哈哈哈哈哈 那个被打残了哈哈哈哈哈哈@SummerYaaa @左右左左荼')
+    print(line)
+    text_fixing_file('1.txt','2.txt')
+    
