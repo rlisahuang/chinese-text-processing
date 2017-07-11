@@ -135,19 +135,23 @@ def text_fixing_file(inputfile, outputfile):
     
     for i in range(len(lines)):  
         if lines[i] not in lines_seen:
-            tran2simp = Traditional2Simplified(lines[i])
-            noUsernRepeat = username_and_duplicate_char(tran2simp)
-            noOther = filter_other(noUsernRepeat)
-            noNonsense = filter_nonsense(noOther)
-            noBrackets = filter_brackets(noNonsense)
-            noPunc = remove_extra_punctuation(noBrackets)
-            result = remove_extra_space(noPunc)            
+
+            # tran2simp = Traditional2Simplified(lines[i])
+            # noUsernRepeat = username_and_duplicate_char(tran2simp)
+            # noOther = filter_other(noUsernRepeat)
+            # noNonsense = filter_nonsense(noOther)
+            # noBrackets = filter_brackets(noNonsense)
+            # noPunc = remove_extra_punctuation(noBrackets)
+            # result = remove_extra_space(noPunc)
+
+            result = text_fixing_line(lines[i])
 
             lines_seen.add(lines[i])
             
-            if lines[i] == '\n' or (noUsernRepeat != '\n' and noOther != '\n' \
-                and noNonsense != '\n' and noBrackets != '\n' and noPunc != '\n' \
-                and result != '\n'): 
+            # if lines[i] == '\n' or (noUsernRepeat != '\n' and noOther != '\n' \
+            #     and noNonsense != '\n' and noBrackets != '\n' and noPunc != '\n' \
+            #     and result != '\n'):
+            if lines[i] == '\n' or result != '\n':
                 lines_added.append(lines[i])
                 fl2.write(result)
                 
@@ -167,6 +171,6 @@ if __name__ == "__main__":
     # print(line)
     # text_fixing_file('1.txt','2.txt')
     inputfile = '../../Downloads/chatpair.txt'
-    outputfile = 'chatpair_fixed_03.txt'
+    outputfile = 'chatpair_fixed_test.txt'
     text_fixing_file(inputfile, outputfile)
     # print(filter_nonsense('额(o) 是这样的啊( ^ ) 好吧(我只是随口一说诶 ) 么么哒()'))
