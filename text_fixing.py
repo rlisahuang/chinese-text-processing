@@ -70,6 +70,7 @@ def filter_nonsense(line):
     for word in nonsense:
         if word in line:
             line = line.replace(word, u'')
+    line = re.sub(r"\([o^./'`0* ]*\)", r'', line)
 
     return line
 
@@ -162,7 +163,10 @@ def text_fixing_file(inputfile, outputfile):
 # --------------------------- Testing --------------------------------
     
 if __name__ == "__main__":
-    line = text_fixing_line('哈哈哈哈哈哈哈哈 那个被打残了哈哈哈哈哈哈@SummerYaaa @左右左左荼')
-    print(line)
-    text_fixing_file('1.txt','2.txt')
-    
+    # line = text_fixing_line('哈哈哈哈哈哈哈哈 那个被打残了哈哈哈哈哈哈@SummerYaaa @左右左左荼')
+    # print(line)
+    # text_fixing_file('1.txt','2.txt')
+    inputfile = '../../Downloads/chatpair.txt'
+    outputfile = 'chatpair_fixed_03.txt'
+    text_fixing_file(inputfile, outputfile)
+    # print(filter_nonsense('额(o) 是这样的啊( ^ ) 好吧(我只是随口一说诶 ) 么么哒()'))
